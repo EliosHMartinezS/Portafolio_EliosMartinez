@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elios Hiram Martínez Sánchez · Desarrollador Java Full Stack</title>
+  <meta name="description" content="Portafolio de Elios Hiram Martínez Sánchez, Desarrollador Web / Java Full Stack en Monterrey, México.">
+
+  <!-- Fuentes: Space Grotesk (títulos) · Inter (cuerpo) · JetBrains Mono (etiquetas/código) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Fondos animadas en bucle -->
+<div class="bg-gif-container">
+  <img src="stray-straycity1-game.gif" class="bg-gif bg-gif-1" alt="Fondo animado 1" />
+  <img src="stray-straycity2-game.gif" class="bg-gif bg-gif-2" alt="Fondo animado 2" />
+  <div class="bg-overlay"></div>
+</div>
+
+  <!-- ===================================================================
+       NAV — estilo "pestañas de editor de código". Cada enlace simula
+       un archivo abierto en un IDE, referencia real a las secciones.
+  ==================================================================== -->
+  <header class="tabbar" id="tabbar">
+    <div class="tabbar__inner">
+      <a href="#inicio" class="tabbar__brand">
+        <span class="tabbar__dot" aria-hidden="true"></span>
+        EHMS<span class="tabbar__brand-muted">.dev</span>
+        <span class="tabbar__badge" title="Señal activa">B-12</span>
+      </a>
+
+      <button class="tabbar__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="tabbar-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="tabbar__nav" id="tabbar-nav">
+        <a href="#sobre-mi" class="tab"><span class="tab__name">sobre-mi</span><span class="tab__ext"></span></a>
+        <a href="#proyectos" class="tab"><span class="tab__name">proyectos</span><span class="tab__ext"></span></a>
+        <a href="#habilidades" class="tab"><span class="tab__name">habilidades</span><span class="tab__ext"></span></a>
+        <a href="#contacto" class="tab tab--cta"><span class="tab__name">contacto</span><span class="tab__ext"></span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- =================================================================
+         HERO
+    ================================================================== -->
+    <section class="hero" id="inicio">
+      <div class="hero__grid">
+        <div class="hero__content">
+          <p class="prompt-line">
+            <span class="prompt-line__symbol">Amante del Agua y los animales</span><span class="prompt-line__colon"></span><span class="prompt-line__path"></span><span class="prompt-line__dollar"></span>
+            <span class="prompt-line__cmd">listo para lo que se necesite</span>
+          </p>
+
+          <h1 class="hero__title">
+            Elios Hiram<br>
+            <span class="hero__title-accent">Martínez Sánchez</span>
+          </h1>
+
+          <p class="hero__role">Desarrollador Web · Java Full Stack</p>
+
+          <p class="hero__tagline">
+            Construyo interfaces claras y sistemas backend sólidos —
+            del boceto en Figma al código en producción, cuidando cada
+            detalle en el camino.
+          </p>
+
+          <div class="hero__cta">
+            <a href="Elios Hiram Martinez Sanchez.pdf" download="Elios_Hiram_Martinez_Sanchez_CV.pdf" class="btn btn--primary">
+  Descargar CV
+</a>
+            <a href="#proyectos" class="btn btn--ghost">
+              Ver proyectos
+            </a>
+          </div>
+
+          <ul class="hero__meta">
+            <li>📍 Monterrey, México</li>
+            <li>✉️ mjmtzshz@gmail.com</li>
+          </ul>
+        </div>
+
+        <div class="hero__panel" aria-hidden="true">
+          <div class="code-window">
+            <div class="code-window__bar">
+              <span></span><span></span><span></span>
+              <p class="code-window__title">perfil.java</p>
+            </div>
+            <pre class="code-window__body"><code><span class="tok-kw">public class</span> <span class="tok-class">Desarrollador</span> {
+
+  <span class="tok-kw">private</span> String nombre = <span class="tok-str">"Elios Hiram"</span>;
+  <span class="tok-kw">private</span> String rol    = <span class="tok-str">"Java Full Stack"</span>;
+  <span class="tok-kw">private</span> String[] stack = {
+    <span class="tok-str">"HTML5"</span>, <span class="tok-str">"CSS3"</span>, <span class="tok-str">"JavaScript"</span>,
+    <span class="tok-str">"Bootstrap"</span>, <span class="tok-str">"Java"</span>, <span class="tok-str">"Git"</span>
+  };
+
+  <span class="tok-kw">public</span> <span class="tok-kw">boolean</span> <span class="tok-fn">disponible</span>() {
+    <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
+  }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SOBRE MÍ — presentado como un "git log" de la trayectoria.
+         Estructura real: cada commit es un hito verídico del bootcamp.
+    ================================================================== -->
+    <section class="section" id="sobre-mi">
+      <div class="section__header">
+        <p class="eyebrow">// memorias-b12.</p>
+        <h2 class="section__title">Memorias desbloqueadas</h2>
+      </div>
+
+      <div class="about__grid">
+        <p class="about__text">
+          Mi camino hacia el desarrollo empezó por resolver problemas reales,
+          no por seguir una fórmula. Pasé por un bootcamp intensivo de
+          formación Full Stack donde aprendí a pensar como programador:
+          descomponer problemas, escribir código legible y trabajar con
+          control de versiones como parte natural del flujo de trabajo.
+          Hoy combino ese entrenamiento con una base sólida en
+          <strong>Java</strong> para construir tanto la cara visible de una
+          aplicación como la lógica que la sostiene por debajo.
+        </p>
+        <!-- Gift -->
+  <div class="stray-gif-card">
+    <img src="stray-straygame.gif" alt="B-12 y el gato en Stray" />
+  </div>
+</div>
+
+        <!-- Registro de commits: hitos de la trayectoria -->
+        <ol class="commit-log" aria-label="Memorias desbloqueadas de la trayectoria">
+          <li class="commit">
+            <span class="commit__hash">MEM_01</span>
+            <div class="commit__body">
+              <p class="commit__msg">memoria recuperada: primeros pasos en la ciudad del código</p>
+              <p class="commit__desc">Primeros pasos autodidactas en HTML, CSS y lógica de programación.</p>
+            </div>
+          </li>
+          <li class="commit">
+            <span class="commit__hash">MEM_02</span>
+            <div class="commit__body">
+              <p class="commit__msg">memoria recuperada: bootcamp Full Stack — fundamentos sólidos</p>
+              <p class="commit__desc">JavaScript, Bootstrap, control de versiones con Git/GitHub y buenas prácticas de código.</p>
+            </div>
+          </li>
+          <li class="commit">
+            <span class="commit__hash">MEM_03</span>
+            <div class="commit__body">
+              <p class="commit__msg">memoria recuperada: especialización en Java</p>
+              <p class="commit__desc">Programación orientada a objetos, estructuras de datos y lógica de backend.</p>
+            </div>
+          </li>
+          <li class="commit commit--current">
+            <span class="commit__hash">MEM_04</span>
+            <div class="commit__body">
+              <p class="commit__msg">señal activa: construyendo proyectos Full Stack reales</p>
+              <p class="commit__desc">Aplicando diseño en Figma, maquetado responsivo y lógica en Java a proyectos propios.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         PROYECTOS
+    ================================================================== -->
+    <section class="section" id="proyectos">
+      <div class="section__header">
+        <p class="eyebrow">// proyectos.json</p>
+        <h2 class="section__title">Proyectos</h2>
+      </div>
+
+      <div class="projects__grid">
+
+        <!-- Proyecto 1: Marcando Huellitas -->
+        <article class="project-card">
+          <div class="project-card__media">
+            <!-- Sustituye por una captura real del proyecto -->
+            <img src="Marcando Huellitas.jpg" alt="Vista previa del proyecto Marcando Huellitas" loading="lazy">
+          </div>
+          <div class="project-card__body">
+            <h3 class="project-card__title">Marcando Huellitas</h3>
+            <p class="project-card__desc">
+              Sitio web maquetado desde cero en Figma y llevado a producción
+              con HTML, CSS y Bootstrap, enfocado en un diseño limpio,
+              accesible y completamente responsivo.
+            </p>
+            <ul class="badge-list" aria-label="Tecnologías usadas">
+              <li class="badge">Figma</li>
+              <li class="badge">HTML5</li>
+              <li class="badge">CSS3</li>
+              <li class="badge">Bootstrap</li>
+            </ul>
+            <div class="project-card__links">
+              <a href="#" class="btn btn--small btn--primary" target="_blank" rel="noopener">Live Demo</a>
+              <a href="#" class="btn btn--small btn--ghost" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Proyecto 2: personalízalo con tu proyecto de backend/bootcamp -->
+        <article class="project-card">
+          <div class="project-card__media">
+            <img src="logo GM HD.png" alt="Vista previa del proyecto de backend en Java" loading="lazy">
+          </div>
+          <div class="project-card__body">
+            <h3 class="project-card__title">GM Legacy</h3>
+            <p class="project-card__desc">
+              E-comerce desarrollada para la gestión y venta de productos deportivos y
+              proyectos en base a la marca personal del futbolista mexicano Gilberto Mora.Proyecto de Hackaton.
+            </p>
+            <ul class="badge-list" aria-label="Tecnologías usadas">
+              <li class="badge">Java</li>
+              <li class="badge">POO</li>
+              <li class="badge">Git</li>
+              <li class="badge">API REST</li>
+            </ul>
+            <div class="project-card__links">
+              <a href="#" class="btn btn--small btn--primary" target="_blank" rel="noopener">Live Demo</a>
+              <a href="#" class="btn btn--small btn--ghost" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =================================================================
+         HABILIDADES / STACK
+    ================================================================== -->
+    <section class="section" id="habilidades">
+      <div class="section__header">
+        <p class="eyebrow">// habilidades.yml</p>
+        <h2 class="section__title">Stack &amp; herramientas</h2>
+      </div>
+
+      <div class="skills__grid">
+        <div class="skill-group">
+          <h3 class="skill-group__title">Frontend</h3>
+          <ul class="skill-group__list">
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>JavaScript</li>
+            <li>Bootstrap</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h3 class="skill-group__title">Backend</h3>
+          <ul class="skill-group__list">
+            <li>Java</li>
+            <li>Programación orientada a objetos</li>
+            <li>Estructuras de datos</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h3 class="skill-group__title">Herramientas</h3>
+          <ul class="skill-group__list">
+            <li>Git &amp; GitHub</li>
+            <li>Figma</li>
+            <li>VS Code</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         CONTACTO
+    ================================================================== -->
+    <section class="section section--contact" id="contacto">
+      <div class="section__header">
+        <p class="eyebrow">// contacto.md</p>
+        <h2 class="section__title">Hablemos</h2>
+      </div>
+
+      <div class="contact__grid">
+        <div class="contact__info">
+          <p class="contact__text">
+            ¿Tienes un proyecto en mente o una vacante disponible?
+            Escríbeme, respondo rápido.
+          </p>
+          <a href="mailto:mjmtzshz@gmail.com" class="contact__email">mjmtzshz@gmail.com</a>
+          <p class="contact__location">📍 Monterrey, México</p>
+
+          <ul class="social-list">
+            <li><a href="https://github.com/EliosHMartinezS" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/elios-h-martinez/" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+
+        <!-- Formulario funcional: conecta a un backend propio o servicio
+             tipo Formspree / EmailJS para recibir los mensajes -->
+        <form class="contact__form" action="#" method="POST">
+          <label class="field">
+            <span class="field__label">Nombre</span>
+            <input type="text" name="nombre" required placeholder="Tu nombre">
+          </label>
+
+          <label class="field">
+            <span class="field__label">Correo</span>
+            <input type="email" name="email" required placeholder="tu@correo.com">
+          </label>
+
+          <label class="field">
+            <span class="field__label">Mensaje</span>
+            <textarea name="mensaje" rows="4" required placeholder="Cuéntame sobre tu proyecto..."></textarea>
+          </label>
+
+          <button type="submit" class="btn btn--primary btn--full">Enviar mensaje</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Sección Gato Dormido -->
+<div class="stray-sleeping-cat">
+  <img id="cat-gif" src="stray-gatomimido.gif" alt="Gato dormido" />
+  <audio id="cat-sound" src="ronroneo.mp3" preload="auto"></audio>
+</div>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Elios Hiram Martínez Sánchez. Hecho con HTML, CSS y café.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

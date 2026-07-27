@@ -1,0 +1,840 @@
+/* =========================================================================
+   STRAY THEME — Ciudad Muerta / Interfaz B-12
+   Paleta: callejón nocturno + naranja neón (chaleco) + cian eléctrico (HUD)
+   Estructura de clases idéntica al styles.css original: esto es un
+   reemplazo directo, no requiere tocar el HTML (salvo los ajustes
+   opcionales indicados aparte).
+========================================================================= */
+
+/* =========================================================================
+   1. VARIABLES / TOKENS DE DISEÑO
+========================================================================= */
+:root {
+  /* Fondo — Ciudad Muerta */
+  --bg:            #0A0B10;
+  --surface:       #12141C;
+  --surface-alt:   #181B26;
+  --border:        #2A2E3A;
+  --border-glow:   #3A3F52;
+
+  /* Texto */
+  --text-primary:  #E8EAF0;
+  --text-muted:    #8890A0;
+
+  /* Acentos neón — reutilizo los nombres antiguos para no romper el HTML */
+  --accent-amber:      #FF7A29;   /* naranja neón — chaleco */
+  --accent-amber-dim:  #C25A1C;
+  --accent-teal:       #33F0E8;   /* cian eléctrico — HUD de B-12 */
+  --accent-teal-dim:   #1FA9A2;
+
+  /* Glow (dos capas: núcleo + halo, como un letrero real) */
+  --glow-orange: 0 0 4px rgba(255,122,41,0.9), 0 0 18px rgba(255,122,41,0.45), 0 0 40px rgba(255,122,41,0.2);
+  --glow-cyan:   0 0 4px rgba(51,240,232,0.9), 0 0 18px rgba(51,240,232,0.4), 0 0 40px rgba(51,240,232,0.18);
+
+  /* Tipografía (se mantiene el trío original) */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* Espaciado (escala 8pt) */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 5rem;
+
+  /* Layout */
+  --container-max: 1120px;
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  /* Esquina "cápsula B-12": redondeada arriba-izq / abajo-der, recta en las otras dos */
+  --radius-capsule: 18px 4px 18px 4px;
+}
+
+/* =========================================================================
+   2. RESET BÁSICO
+========================================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+
+h1, h2, h3 { font-family: var(--font-display); margin: 0; line-height: 1.15; }
+
+p { margin: 0 0 var(--space-2); }
+
+a { color: inherit; text-decoration: none; }
+
+ul { list-style: none; margin: 0; padding: 0; }
+
+button { font-family: inherit; cursor: pointer; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent-teal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* =========================================================================
+   3. AMBIENTACIÓN — Ciudad Muerta
+   Dos overlays fijos sobre toda la página:
+   a) scanlines CRT sutiles (franjas horizontales de 2px)
+   b) viñeta que oscurece las esquinas, como un callejón iluminado
+      solo por letreros de neón puntuales
+   Ambos van en pseudo-elementos fijos del body para no interferir
+   con el layout ni el scroll.
+========================================================================= */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.025) 0px,
+    rgba(255,255,255,0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 45%,
+    rgba(0,0,0,0.55) 100%
+  );
+}
+
+/* =========================================================================
+   4. UTILIDADES
+========================================================================= */
+.section {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+  position: relative;
+  z-index: 1;
+}
+
+.section__header { margin-bottom: var(--space-4); }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-orange, var(--accent-amber));
+  text-shadow: var(--glow-orange);
+  margin: 0 0 var(--space-1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.section__title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 600;
+}
+
+/* Botones — como letreros de neón que se "encienden" al interactuar */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.7rem;
+  border-radius: var(--radius-capsule);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  letter-spacing: 0.02em;
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn--primary {
+  background: var(--accent-amber);
+  color: #170D04;
+  box-shadow: 0 0 0 rgba(255,122,41,0);
+}
+.btn--primary:hover {
+  background: #ff8c42;
+  box-shadow: var(--glow-orange);
+}
+
+.btn--ghost {
+  background: rgba(18,20,28,0.5);
+  border-color: var(--border-glow);
+  color: var(--text-primary);
+  backdrop-filter: blur(6px);
+}
+.btn--ghost:hover {
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+  box-shadow: var(--glow-cyan);
+}
+
+.btn--small { padding: 0.55rem 1.2rem; font-size: 0.78rem; }
+.btn--full { width: 100%; }
+
+/* =========================================================================
+   5. NAV — HUD superior de B-12
+========================================================================= */
+.tabbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 11, 16, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.tabbar__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tabbar__brand {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tabbar__brand-muted { color: var(--text-muted); }
+
+/* Pequeño badge de "señal activa" — referencia directa a B-12 */
+.tabbar__badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-capsule);
+  border: 1px solid var(--accent-teal-dim);
+  color: var(--accent-teal);
+  text-shadow: var(--glow-cyan);
+  letter-spacing: 0.04em;
+}
+
+/* El punto de conexión ahora "respira" como una luz de sensor activo */
+.tabbar__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-teal);
+  box-shadow: var(--glow-cyan);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.tabbar__nav {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.tab {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.tab:hover {
+  color: var(--accent-teal);
+  border-color: var(--accent-teal-dim);
+  background: rgba(51,240,232,0.06);
+}
+.tab__ext { color: var(--accent-amber); }
+
+.tab--cta {
+  border: 1px solid var(--border-glow);
+  margin-left: var(--space-1);
+}
+.tab--cta:hover {
+  border-color: var(--accent-amber);
+  box-shadow: var(--glow-orange);
+  color: var(--accent-amber);
+}
+
+.tabbar__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 8px;
+}
+.tabbar__toggle span {
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+}
+
+/* =========================================================================
+   6. HERO
+========================================================================= */
+.hero {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3) var(--space-5);
+  position: relative;
+  z-index: 1;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.prompt-line {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+.prompt-line__symbol { color: var(--accent-teal); text-shadow: var(--glow-cyan); }
+.prompt-line__colon,
+.prompt-line__dollar { color: var(--text-muted); margin: 0 0.15rem; }
+.prompt-line__path { color: var(--accent-amber); }
+.prompt-line__cmd { color: var(--text-primary); }
+
+.hero__title {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+.hero__title-accent {
+  color: var(--accent-amber);
+  text-shadow: var(--glow-orange);
+}
+
+.hero__role {
+  font-family: var(--font-mono);
+  color: var(--accent-teal);
+  text-shadow: var(--glow-cyan);
+  font-size: 1.05rem;
+  margin-bottom: var(--space-2);
+}
+
+.hero__tagline {
+  max-width: 46ch;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin-bottom: var(--space-3);
+}
+
+.hero__cta {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.hero__meta {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Panel de código — ahora un panel holográfico translúcido de B-12 */
+.code-window {
+  background: rgba(18, 20, 28, 0.55);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-capsule);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 0 1px rgba(51,240,232,0.08) inset, 0 20px 60px -20px rgba(0,0,0,0.7);
+}
+
+.code-window__bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-1) var(--space-2);
+  background: rgba(24, 27, 38, 0.7);
+  border-bottom: 1px solid var(--border);
+}
+.code-window__bar span {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--border-glow);
+}
+.code-window__bar span:nth-child(1) { background: var(--accent-amber); box-shadow: 0 0 6px rgba(255,122,41,0.7); }
+.code-window__bar span:nth-child(2) { background: var(--accent-teal); box-shadow: 0 0 6px rgba(51,240,232,0.7); }
+.code-window__bar span:nth-child(3) { background: #6b7280; }
+.code-window__title {
+  margin: 0 0 0 var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.code-window__body {
+  margin: 0;
+  padding: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  overflow-x: auto;
+}
+.tok-kw    { color: var(--accent-teal); }
+.tok-class { color: var(--accent-amber); }
+.tok-str   { color: #a5f0c4; }
+.tok-fn    { color: #7fd4ff; }
+
+/* =========================================================================
+   7. SOBRE MÍ — "Memorias de B-12"
+   (mismas clases .commit-log / .commit que antes; solo cambia el skin.
+   Ver notas de HTML abajo para los ajustes de texto opcionales)
+========================================================================= */
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.stray-gif-card {
+  margin-top: 1.5rem;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  /* Borde naranja neón */
+  border: 2px solid #ff6600;
+  /* Resplandor neón (glow) con el mismo tono naranja */
+  box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto hover opcional para cuando pases el mouse encima */
+.stray-gif-card:hover {
+  box-shadow: 0 0 25px rgba(255, 102, 0, 0.8);
+  transform: translateY(-2px);
+}
+
+.stray-gif-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.about__text { color: var(--text-muted); font-size: 1.02rem; }
+
+.commit-log {
+  border-left: 2px solid var(--border-glow);
+  padding-left: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.commit { position: relative; }
+.commit::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-3) - 5px);
+  top: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-glow);
+}
+.commit--current::before {
+  background: var(--accent-teal);
+  box-shadow: var(--glow-cyan);
+}
+
+.commit__hash {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-amber);
+}
+
+.commit__msg {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.92rem;
+  margin: 0.25rem 0;
+}
+
+.commit__desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =========================================================================
+   8. PROYECTOS — paneles holográficos
+========================================================================= */
+.projects__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.project-card {
+  background: rgba(18, 20, 28, 0.55);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-capsule);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.project-card:hover {
+  border-color: var(--accent-teal-dim);
+  transform: translateY(-4px);
+  box-shadow: var(--glow-cyan);
+}
+
+.project-card__media {
+  aspect-ratio: 16 / 9;
+  background: var(--surface-alt);
+  position: relative;
+}
+.project-card__media img { width: 100%; height: 100%; object-fit: cover; }
+/* leve tinte de escaneo sobre las imágenes para integrarlas al tema */
+.project-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(51,240,232,0.06), transparent 40%);
+  pointer-events: none;
+}
+
+.project-card__body {
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.project-card__title { font-size: 1.15rem; font-weight: 600; }
+.project-card__desc { color: var(--text-muted); font-size: 0.92rem; flex: 1; }
+
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: var(--space-1) 0 var(--space-2);
+}
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: var(--radius-capsule);
+  background: rgba(51,240,232,0.06);
+  border: 1px solid var(--accent-teal-dim);
+  color: var(--accent-teal);
+}
+
+.project-card__links { display: flex; gap: var(--space-1); }
+
+/* =========================================================================
+   9. HABILIDADES
+========================================================================= */
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.skill-group {
+  background: rgba(18, 20, 28, 0.55);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-capsule);
+  padding: var(--space-3);
+  backdrop-filter: blur(10px);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.skill-group:hover {
+  border-color: var(--accent-amber-dim);
+  box-shadow: var(--glow-orange);
+}
+
+.skill-group__title {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--accent-amber);
+  text-shadow: var(--glow-orange);
+  margin-bottom: var(--space-2);
+}
+
+.skill-group__list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+.skill-group__list li:last-child { border-bottom: none; }
+
+/* =========================================================================
+   10. CONTACTO
+========================================================================= */
+.contact__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.contact__text { color: var(--text-muted); max-width: 40ch; }
+
+.contact__email {
+  display: inline-block;
+  font-family: var(--font-mono);
+  color: var(--accent-teal);
+  text-shadow: var(--glow-cyan);
+  font-size: 1.1rem;
+  margin: var(--space-1) 0;
+}
+
+.contact__location { color: var(--text-muted); font-size: 0.9rem; }
+
+.social-list {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.social-list a {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease, text-shadow 0.2s ease;
+}
+.social-list a:hover {
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
+  text-shadow: var(--glow-orange);
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.field__label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.field input,
+.field textarea {
+  background: rgba(18, 20, 28, 0.6);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  resize: vertical;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent-teal);
+  box-shadow: var(--glow-cyan);
+}
+
+/* =========================================================================
+   11. FOOTER
+========================================================================= */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: var(--space-3);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================================
+   12. RESPONSIVE — Tablet (≤ 900px)
+========================================================================= */
+@media (max-width: 900px) {
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__panel { order: -1; }
+  .about__grid { grid-template-columns: 1fr; }
+  .contact__grid { grid-template-columns: 1fr; }
+  .projects__grid { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+  .skills__grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* =========================================================================
+   13. RESPONSIVE — Móvil (≤ 640px)
+========================================================================= */
+@media (max-width: 640px) {
+  .section { padding: var(--space-5) var(--space-2); }
+
+  .tabbar__toggle { display: flex; }
+
+  .tabbar__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(10, 11, 16, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: var(--space-2);
+    display: none;
+  }
+  .tabbar__nav.is-open { display: flex; }
+  .tab { border-radius: var(--radius-sm); }
+  .tab--cta { margin-left: 0; }
+
+  .hero__cta { flex-direction: column; }
+  .hero__cta .btn { width: 100%; }
+
+  .projects__grid { grid-template-columns: 1fr; }
+  .skills__grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================
+   FONDO ANIMADO EN BUCLE (STRAY / CYBERPUNK)
+   ========================================== */
+
+/* Contenedor principal del fondo fijo */
+.bg-gif-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2; /* Lo coloca al fondo de todo el contenido */
+  overflow: hidden;
+  pointer-events: none; /* Permite hacer clic en los botones y enlaces normalmente */
+}
+
+/* Estilo base para los GIFs de fondo */
+.bg-gif {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Adapta el GIF sin deformarlo en cualquier pantalla */
+}
+
+/* Asignación de animaciones */
+.bg-gif-1 {
+  animation: fadeGif1 12s infinite ease-in-out;
+}
+
+.bg-gif-2 {
+  animation: fadeGif2 12s infinite ease-in-out;
+}
+
+/* Transición en bucle para el primer GIF */
+@keyframes fadeGif1 {
+  0%, 45% {
+    opacity: 0.25; /* Opacidad sutil para mantener la legibilidad */
+  }
+  50%, 95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
+
+/* Transición en bucle para el segundo GIF */
+@keyframes fadeGif2 {
+  0%, 45% {
+    opacity: 0;
+  }
+  50%, 95% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Capa de oscurecimiento sobre los GIFs */
+.bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 15, 0.82); /* Tono oscuro para que el texto sea 100% legible */
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Contenedor del gato dormido al final */
+.stray-sleeping-cat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 40px auto 20px auto;
+}
+
+.stray-sleeping-cat img {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid #ff6600;
+  box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stray-sleeping-cat img:hover {
+  box-shadow: 0 0 25px rgba(255, 102, 0, 0.8);
+  transform: translateY(-2px);
+}
